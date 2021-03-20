@@ -14,11 +14,11 @@ Simple document upload service.
 ### Future Improvements
 Using the local file system to manage a file state is problematic. Using a remote bucket service is more so. Using the host to store files doesn't allow for multiple hosts to access the files (like a web farm). Once files are accessible by multiple hosts code to lock files becomes nearly useless and reactive error handling will have to decide if a file is free for modification.
 
-Instead...
+#### Instead...
 
-File state should be handled by a database. This is true if the files are a network share or a remote bucket.
+File state should be handled by a database. This is true if the files are stored in a network share or a remote bucket.
 
-Files will be stored with a non-human readable hashkey as its name and path. The hash key will be derrived from its content bytes. This allows multiple uploads of the same file with the same or different names to consume the same space (deduplication).
+Files will be stored with a non-human readable hashkey as its name and path (aa/bb/cc/dd/00/aabbccdd00.docx). The hash key will be derrived from its content bytes. This allows multiple uploads of the same file with the same or different names to consume the same space (deduplication).
 
 The database will maintain the original file information (filename, dates, state, hashkey) in addition to all file hashes (hashkey, size, mimetype) references to the files.
 
@@ -34,8 +34,9 @@ The filename will be looked up in the database giving us the hashkey and relaven
 This architecture would ensure that:
 * No two processes are trying to modify the same file. 
 * Any number of hosts can interact with the same file.
-* No file is stored multiple times with a different name.
+* No file is stored multiple times under a different name.
 * File metadata is now searchable without accessing the remote store.
+* The number of files stored in any given directory tree is 1.
 
 ### Installation
 

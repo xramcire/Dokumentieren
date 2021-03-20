@@ -1,5 +1,7 @@
 ## About The Project
 
+Simple document upload service. 
+
 * Follow standard REST principles
 * Include unit tests and integration tests
 * Does not need authentication/authorization

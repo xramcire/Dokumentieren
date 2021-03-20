@@ -3,7 +3,7 @@ Dokumentieren is a simple document upload service created for learning purposes.
 
 ### Architectural Considerations
 * Follow REST standards.
-* Include integration tests.
+* Include automated tests.
 * Thread safe.
 * Handle multiple concurrent requests to the same file.
 * Use async where available.

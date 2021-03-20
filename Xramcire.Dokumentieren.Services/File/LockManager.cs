@@ -3,6 +3,10 @@ using System.Collections.Concurrent;
 
 namespace Xramcire.Dokumentieren.Services
 {
+    //
+    //  This is an adpatation of code found here: 
+    //  https://www.codeproject.com/Tips/1190802/File-Locking-in-a-Multi-Threaded-Environment
+    //
     internal class DocumentLock
     {
         public int Count = 0;

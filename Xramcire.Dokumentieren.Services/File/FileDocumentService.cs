@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,13 +16,14 @@ namespace Xramcire.Dokumentieren.Services
         {
             Directory.CreateDirectory(GetDocumentRoot());
         }
-        //
-        //  These methods are not async but any method I know to make
-        //  them appear so will only make performance worse. Thread.Run etc...
-        //  Access to the local file system is only paritally async-able.
-        //
+
         public async Task DeleteAsync(string documentName)
         {
+            //
+            //  This method is not async but any method I know to make
+            //  is appear so will only make performance worse. Thread.Run etc...
+            //  Access to the local file system is only paritally async-able.
+            //
             string blobPath = GetDocumentBlobPath(documentName);
 
             DocumentLockManager.GetLock(documentName, () => {
@@ -39,8 +38,16 @@ namespace Xramcire.Dokumentieren.Services
             if (!File.Exists(blobPath))
                 return null;
 
-            return DocumentLockManager.GetLock(documentName, () => {
-                return File.OpenRead(blobPath);
+            return await DocumentLockManager.GetLock(documentName, async () =>
+            {
+                using (MemoryStream ret = new MemoryStream())
+                {
+                    using (var fileStream = File.OpenRead(blobPath))
+                    {
+                        await fileStream.CopyToAsync(ret);
+                        return ret;
+                    }
+                }
             });
         }
 

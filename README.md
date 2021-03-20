@@ -1,17 +1,28 @@
 ## About The Project
-Simple document upload service. 
+This is a simple document upload service.
 
 ### Architectural Considerations
 * Follow REST standards.
 * Include integration tests.
-* Thread-safe.
+* Thread safe.
 * Handle multiple concurrent requests to the same file.
 * Use async where available.
 * Use dependency injection where appropriate.
 * Support multiple file storage services. 
 * Seperate large concerns by project (Web / Services).
+* Seperate smaller concerns by class.
 
 ### Future Improvements
+
+* Implement the BucketDocumentService class. Perhaps break it into a class by service (AWS, Azure, Google).
+* Implement authentication.
+* Implement configuration.
+* Implement configuration to select storage service.
+* Implement document searching.
+* Implement database based file management. 
+ 
+#### On database based file management...
+
 Using the local file system to manage a file state is problematic. Using a remote bucket service is more so. Using the host to store files doesn't allow for multiple hosts to access the files (like a web farm). Once files are accessible by multiple hosts code to lock files becomes nearly useless and reactive error handling will have to decide if a file is free for modification.
 
 #### Instead...
@@ -26,7 +37,7 @@ The database will maintain the original file information (filename, dates, state
 As files are uploaded the hash is created. The content will be stored in the file store (or discarded in the case of a repeat upload) then a new reference record will be added to the database.
 
 #### Deletes
-Deletes will mark files as deleted (soft delete) in the database. A nanny service should regularly scan the database for soft deleted file references and hard delete them. If the reference is the last reference to the file, the file will then be deleted.
+Deletes will mark files as deleted (soft delete) in the database. After a delete an async nanny service should scan the database for soft deleted file references and hard delete them. If the reference is the last reference to the file, the file will also be deleted.
 
 #### Downloads
 The filename will be looked up in the database giving us the hashkey and relavent file info. The content can then be streamed back to the user with the shared content and correct filename. Soft deleted files will return 404.

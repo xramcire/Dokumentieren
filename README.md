@@ -16,6 +16,8 @@ Dokumentieren is a simple document upload service created for learning purposes.
 
 * Implement the BucketDocumentService class. Perhaps break it into a class by service (AWS, Azure, Google).
 * Implement authentication.
+* Implement logging (exceptions, observable metrics). 
+* Implement compression.
 * Implement configuration.
 * Implement configuration to select storage service.
 * Implement document searching.
@@ -37,10 +39,10 @@ The database will maintain the original file information (filename, dates, state
 As files are uploaded the hash is created. The content will be stored in the file store or discarded in the case of a repeat upload then a new reference record will be added to the database.
 
 #### Deletes
-Deletes will mark files as deleted (soft delete) in the database. After a delete an async nanny service should scan the database for soft deleted file references and hard delete them. If the reference is the last reference to the file, the file will also be deleted.
+Deletes will mark files as deleted (soft delete) in the database. After a delete an async nanny process should query the database for soft deleted file references and hard delete them. If the reference is the last reference to the file, the file will also be deleted.
 
 #### Downloads
-The filename will be looked up in the database giving us the hashkey and relevant file info. The content can then be streamed back to the user with the shared content and correct filename. Soft deleted files will return 404.
+The filename will be looked up in the database giving us the hashkey and relevant file info. The content can then be streamed back to the user with the correct filename. Soft deleted files will return 404.
 
 This architecture would ensure that:
 * No two processes are trying to modify the same file. 

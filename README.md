@@ -6,13 +6,13 @@ Simple document upload service.
 * Includes integration tests.
 * Thread-safe and can handle multiple concurrent requests to the same file.
 
-## Getting Started
+### Installation
 
 Simply pull and run. No configuration is required.
 
-## Included Projects
+### Projects
 
-Xramcire.Dokumentieren.Web
+#### Xramcire.Dokumentieren.Web
 .Net 5.0 Web Application.
 
 Supported routes
@@ -22,8 +22,8 @@ Supported routes
 * GET:		/documents/documentName
 * DELETE:	/documents/documentName
 
-Xramcire.Dokumentieren.Tests
+#### Xramcire.Dokumentieren.Tests
 xUnit test library.
 
-Xramcire.Dokumentieren.Services
+#### Xramcire.Dokumentieren.Services
 .Net 5.0 class library.

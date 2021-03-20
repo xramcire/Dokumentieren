@@ -1,12 +1,5 @@
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
 ## About The Project
-
+<br />
 Simple document upload service. 
 
 * Follows REST standards.
@@ -21,6 +14,13 @@ Simply pull and run. No configuration is required.
 
 Xramcire.Dokumentieren.Web
 .Net 5.0 Web Application.
+
+Supported routes
+* OPTIONS:	/documents/
+* POST:		/documents/
+* PUT:		/documents/documentName
+* GET:		/documents/documentName
+* DELETE:	/documents/documentName
 
 Xramcire.Dokumentieren.Tests
 xUnit test library.

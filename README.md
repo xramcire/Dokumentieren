@@ -47,9 +47,9 @@ The filename will be looked up in the database giving us the hashkey and relevan
 This architecture would ensure that:
 * No two processes are trying to modify the same file. 
 * Any number of hosts can interact with the same file.
-* No file is stored multiple times under a different name.
+* No file is stored multiple times under different names.
 * File metadata can now be retrieved without accessing the remote store.
-* File metadata is now quickly searchable.
+* File metadata is quickly searchable.
 * The number of files stored in any given directory tree is 1.
 
 ### Installation
@@ -58,6 +58,7 @@ Simply pull and run. No configuration is required.
 
 ### Built With
 * .Net 5
+* .Net Core 3.1
 * C# 8
 * xUnit
 * MimeTypeMapOfficial

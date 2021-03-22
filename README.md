@@ -17,7 +17,7 @@ Dokumentieren is a simple document upload service created for learning purposes.
 * Implement the BucketDocumentService class. Perhaps break it into a class by service (AWS, Azure, Google).
 * Implement authentication.
 * Implement logging (exceptions, observable metrics). 
-* Implement http 302 Not Modified.
+* Implement http 304 Not Modified.
 * Implement compression.
 * Implement configuration.
 * Implement configuration to select storage service.

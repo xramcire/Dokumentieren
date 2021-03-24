@@ -15,6 +15,13 @@ namespace Xramcire.Dokumentieren.Services
         //  Authentication will need configuration and or a key vault.
         //  Fun for another day.
         //
+        private readonly IDocumentLockService lockService;
+
+        public BucketDocumentService(IDocumentLockService lockService)
+        {
+            this.lockService = lockService;
+        }
+
         public Task DeleteAsync(string name)
         {
             throw new NotImplementedException();

@@ -26,9 +26,8 @@ namespace Xramcire.Dokumentieren
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<FileDocumentService>();
-            //services.AddTransient<BucketDocumentService>();
-            services.AddSingleton<IDocumentService, FileDocumentService>();
+            services.AddScoped<IDocumentService, FileDocumentService>();
+            services.AddSingleton<IDocumentLockService, FileDocumentLockService>();
             services.AddControllers();
         }
 
@@ -39,6 +38,8 @@ namespace Xramcire.Dokumentieren
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors();
 
             app.UseHttpsRedirection();
 

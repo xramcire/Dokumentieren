@@ -10,10 +10,11 @@ namespace Xramcire.Dokumentieren.Services
     /// </summary>
     public class FileDocumentService : IDocumentService
     {
-        private static ReaderWriterLockSlim documentLock = new ReaderWriterLockSlim();
+        private readonly IDocumentLockService lockService;
 
-        public FileDocumentService()
+        public FileDocumentService(IDocumentLockService lockService)
         {
+            this.lockService = lockService;
             Directory.CreateDirectory(GetDocumentRoot());
         }
 
@@ -26,7 +27,7 @@ namespace Xramcire.Dokumentieren.Services
             //
             string blobPath = GetDocumentBlobPath(documentName);
 
-            DocumentLockManager.GetLock(documentName, () => {
+            this.lockService.GetLock(documentName, () => {
                 File.Delete(blobPath);
             });
         }
@@ -38,11 +39,11 @@ namespace Xramcire.Dokumentieren.Services
             if (!File.Exists(blobPath))
                 return null;
 
-            return await DocumentLockManager.GetLock(documentName, async () =>
+            return await this.lockService.GetLock(documentName, async () =>
             {
-                using (MemoryStream ret = new MemoryStream())
+                await using (MemoryStream ret = new MemoryStream())
                 {
-                    using (var fileStream = File.OpenRead(blobPath))
+                    await using (var fileStream = File.OpenRead(blobPath))
                     {
                         await fileStream.CopyToAsync(ret);
                         return ret;
@@ -55,10 +56,10 @@ namespace Xramcire.Dokumentieren.Services
         {
             string blobPath = GetDocumentBlobPath(documentName);
 
-            await DocumentLockManager.GetLock(documentName, async () => {
+            await this.lockService.GetLock(documentName, async () => {
                 File.Delete(blobPath);
 
-                using (var fileStream = File.Create(blobPath))
+                await using (var fileStream = File.Create(blobPath))
                 {
                     stream.Seek(0, SeekOrigin.Begin);
                     await stream.CopyToAsync(fileStream);

@@ -37,11 +37,11 @@ namespace Xramcire.Dokumentieren.Tests
 
         private const string DOCUMENT_NAME = "helloworld.txt";
         private const string DOCUMENT_TEXT = "Hello World!";
-        private FileDocumentService documentService = new FileDocumentService();
+        private FileDocumentService documentService = new FileDocumentService(new FileDocumentLockService());
 
         private async Task<Stream> GetDocument()
         {
-            using (var content = await documentService.GetAsync(DOCUMENT_NAME))
+            await using (var content = await documentService.GetAsync(DOCUMENT_NAME))
             {
                 return content;
             }
@@ -49,9 +49,9 @@ namespace Xramcire.Dokumentieren.Tests
 
         private async Task CreateDocument()
         {
-            using (var stream = new MemoryStream())
+            await using (var stream = new MemoryStream())
             {
-                using (var writer = new StreamWriter(stream))
+                await using (var writer = new StreamWriter(stream))
                 {
                     writer.Write(DOCUMENT_TEXT);
                     writer.Flush();

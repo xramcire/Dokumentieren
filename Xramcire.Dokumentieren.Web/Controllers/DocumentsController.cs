@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Threading.Tasks;
 using Xramcire.Dokumentieren.Services;
@@ -14,14 +15,6 @@ namespace Xramcire.Dokumentieren.Controllers
         {
             this.documentService = documentService;
         }
-        
-        [HttpOptions]
-        [ProducesResponseType(200)]
-        public IActionResult Options()
-        {
-            Response.Headers.Add("Allow", "OPTIONS, GET, HEAD, POST, PUT");
-            return Ok();
-        }
 
         [HttpPost]
         [ProducesResponseType(200)]
@@ -31,10 +24,10 @@ namespace Xramcire.Dokumentieren.Controllers
 
             if (file == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            using (var stream = file.OpenReadStream())
+            await using (var stream = file.OpenReadStream())
             {
                 await this.documentService.SaveAsync(file.FileName, stream);
             }
@@ -52,16 +45,9 @@ namespace Xramcire.Dokumentieren.Controllers
 
         [HttpPut("{documentName}")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> PutAsync([FromRoute] string documentName)
+        public async Task<IActionResult> PutAsync([FromRoute] string documentName, [FromBody] IFormFile formFile)
         {
-            var file = this.Request.GetFirstFile();
-
-            if (file == null)
-            {
-                return NotFound();
-            }
-
-            using (var stream = file.OpenReadStream())
+            await using(var stream = formFile.OpenReadStream())
             {
                 await this.documentService.SaveAsync(documentName, stream);
             }
